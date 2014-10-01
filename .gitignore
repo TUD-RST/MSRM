@@ -1,0 +1,11 @@
+
+*.pyc
+*.pyw
+
+# pycharm
+.idea/*
+
+# Zwischenergebnisse
+data_*.pcl
+data_*.txt
+
