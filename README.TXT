@@ -4,8 +4,8 @@ Allgemeines
 Das Paket MSRM stellt Software-Routinen zur modellbasierten Steuerung und
 Regelung eines mechanischen Systems zur Verfügung, am Beispiel eines von Natur
 aus instabilen Fahrzeugs. Alle dafür notwendigen Schritte (Modellbildung,
-Steuerungsentwurf (Planung einer Solltrajektorie), Reglerentwurf,Simulation
-und Visualisierung) sind jeweils als einzelnen Python-Skripten angelegt, die
+Steuerungsentwurf (Planung einer Solltrajektorie), Reglerentwurf, Simulation
+und Visualisierung) sind jeweils als einzelnes Python-Skript angelegt, die
 unabhängig von einander ausgeführt und bearbeitet werden können.
 
 Installationshinweise
