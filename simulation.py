@@ -135,9 +135,9 @@ class SimModel(object):
         noise = np.random.rand(Np)*2-1 # zwischen -1 und 1
         rel_noise = 1+noise*bound # zwischen 1-bound und 1+bound
 
-        keys, values = zip(*self.param_values.items())
+        keys, values = list(zip(*list(self.param_values.items())))
         new_values = np.array(values)*rel_noise
-        self.param_values = dict(zip(keys, new_values)) #*-
+        self.param_values = dict(list(zip(keys, new_values))) #*-
 
 
 # Regler-Matrix (Bk, Ak) laden und in Darstellung 1. Ordnung überführen
@@ -174,7 +174,7 @@ Bk_state = st.to_np(state_feedback)#
 pfname = "data_model_equations.pcl"
 with open(pfname, "r") as pfile:
     pdict_eqn = pickle.load(pfile)
-    print pfname, "geladen"
+    print(pfname, "geladen")
 
 
 tol = 1e-8 # Toleranz für den Integrator
@@ -188,7 +188,7 @@ t = sp.Symbol('t')
 traj_fname = "data_trajectories.pcl"
 with open(traj_fname, "r") as pfile:
     pdict_ol = pickle.load(pfile)
-    print traj_fname, "geladen"
+    print(traj_fname, "geladen")
 
 T_end = pdict_ol['T_end']
 Tsim = T_end*1.8
@@ -217,7 +217,7 @@ xa = st.to_np(xa).squeeze() # -> numpy array
 #xa[0]+=.5
 
 # Durchführung der eigentlichen Simulation
-print "\n", u"Simulation des geschlossenen Regelkreises", "\n"
+print("\n", "Simulation des geschlossenen Regelkreises", "\n")
 res = odeint(rhs, xa, tt, rtol = tol, atol = tol)#*-
 
 # Reglerzustände sind nicht relevant
@@ -228,7 +228,7 @@ x1, x2, x3, x4, x5, x6 = r.T
 
 fname = "data_sim_results.txt"
 np.savetxt(  fname, np.column_stack( (tt, r) )  )
-print fname, "geschrieben"
+print(fname, "geschrieben")
 pl.grid(True)
 
 savefig_flag = False

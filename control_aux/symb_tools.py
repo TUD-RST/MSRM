@@ -59,7 +59,7 @@ class equation(object):
 class Container(object):
 
     def __init__(self, **kwargs):
-        assert len( set(dir(self)).intersection(kwargs.keys()) ) == 0
+        assert len( set(dir(self)).intersection(list(kwargs.keys())) ) == 0
         self.__dict__.update(kwargs)
 
 
@@ -118,12 +118,12 @@ def trans_poly(var, cn, left, right):
     # preparations
     condNbr = 2 + 2*cn
 
-    coeffs = map(lambda i: sp.Symbol('a%d' %i), range(condNbr))
+    coeffs = [sp.Symbol('a%d' %i) for i in range(condNbr)]
     #poly =  (map(lambda i, a: a*var**i, range(condNbr), coeffs))
     #1/0
-    poly =  sum(map(lambda i, a: a*var**i, range(condNbr), coeffs))
+    poly =  sum(map(lambda i, a: a*var**i, list(range(condNbr)), coeffs))
 
-    Dpoly = map(lambda i: sp.diff(poly, var, i), range(1,cn+1))
+    Dpoly = [sp.diff(poly, var, i) for i in range(1,cn+1)]
 
 
     # create the conditions
@@ -154,7 +154,7 @@ def symbs_to_func(expr, symbs, arg):
     #TODO: assert all([isinstance(s, sp.Symbol) for s in symbs])
     funcs = [sp.Function(s.name)(arg) for s in symbs]
 
-    return expr.subs(zip(symbs, funcs))
+    return expr.subs(list(zip(symbs, funcs)))
 
 
 def jac(expr, *args):
@@ -176,9 +176,9 @@ def get_coeff_row(eq, vars):
         vars = list(vars)
 
     get_coeff = lambda var: sp.diff(eq.lhs(), var)
-    coeffs =  map(get_coeff, vars)
+    coeffs =  list(map(get_coeff, vars))
     rest = eq.lhs() - sum([coeffs[i]*vars[i] for i in range( len(vars) )])
-    coeff_row = map(get_coeff, vars) + [eq.rhs() - rest]
+    coeff_row = list(map(get_coeff, vars)) + [eq.rhs() - rest]
     return coeff_row
 
 def lin_solve_eqns(eqns, vars):
@@ -211,7 +211,7 @@ def concat_cols(*args):
         if a.shape[1] == 1:
             col_list.append( list(a) )
             continue
-        for i in xrange(a.shape[1]):
+        for i in range(a.shape[1]):
             col_list.append( list(a[:,i]) )
     m = sp.Matrix(col_list).T
 
@@ -233,7 +233,7 @@ def concat_rows(*args):
         if a.shape[0] == 1:
             row_list.append( list(a) )
             continue
-        for i in xrange(a.shape[0]):
+        for i in range(a.shape[0]):
             row_list.append( list(a[i, :]) )
     m = sp.Matrix(row_list)
 
@@ -287,8 +287,8 @@ def all_k_minors(M, k, **kwargs):
     assert k<= m
     assert k<= n
 
-    row_idcs = list(it.combinations(range(m), k))
-    col_idcs = list(it.combinations(range(n), k))
+    row_idcs = list(it.combinations(list(range(m)), k))
+    col_idcs = list(it.combinations(list(range(n)), k))
 
     rc_idx_tuples = list(it.product(row_idcs, col_idcs))
 
@@ -355,7 +355,7 @@ def is_left_coprime(Ap, Bp=None, eps = 1e-10):
     assert len(symbs) == 1
     symb = symbs[0]
 
-    combinations = it.combinations(range(r+m), r)
+    combinations = it.combinations(list(range(r+m)), r)
 
     minors = [col_minor(M, *cols) for cols in combinations]
 
@@ -395,7 +395,7 @@ def is_left_coprime(Ap, Bp=None, eps = 1e-10):
             if np.all(min_dist < eps):
                 # the test root was found in all other minors
 
-                print "critical root:", tr
+                print("critical root:", tr)
                 return False
 
     return True
@@ -419,7 +419,7 @@ def get_expr_var(expr, var = None):
             return symbs[0]
         else:
             errmsg = "%s contains more than one variable: %s " % (expr, symbs)
-            raise ValueError, errmsg
+            raise ValueError(errmsg)
 
 
 def poly_degree(expr, var=None):
@@ -449,7 +449,7 @@ def poly_coeffs(expr, var=None):
 
     d = P.degree()
 
-    return [pdict.get((i,), 0) for i in reversed(xrange(d+1))]
+    return [pdict.get((i,), 0) for i in reversed(range(d+1))]
 
 
 def coeffs(expr, var = None):
@@ -458,7 +458,7 @@ def coeffs(expr, var = None):
     """if var == None, assumes that there is only one variable in expr"""
     expr = sp.sympify(expr)
     if var == None:
-        vars = filter(lambda a:a.is_Symbol, list(expr.atoms()))
+        vars = [a for a in list(expr.atoms()) if a.is_Symbol]
         if len(vars) == 0:
             return [expr] # its a constant
         assert len(vars) == 1
@@ -566,10 +566,10 @@ def clean_numbers(expr, eps=1e-10):
     for f in floats:
         rat = sp_fff(f, maxden)
         rats.append(rat)
-        dummy_symbs.append(symb_gen.next())
+        dummy_symbs.append(next(symb_gen))
 
-    res1 = expr.subs(zip(floats, dummy_symbs))
-    res2 = res1.subs(zip(dummy_symbs, rats))
+    res1 = expr.subs(list(zip(floats, dummy_symbs)))
+    res2 = res1.subs(list(zip(dummy_symbs, rats)))
 
     return res2
 
@@ -578,7 +578,7 @@ def zip0(xx, arg = 0):
     """ useful shortcut for substituting equilibrium points
     example: zip0([x1,x2,x3]) -> [(x1, 0), (x2, 0), (x3,0)]"""
 
-    return zip(xx, [arg]*len(xx))
+    return list(zip(xx, [arg]*len(xx)))
 
 
 def aux_make_tup_if_necc(arg):
@@ -929,7 +929,7 @@ def do_laplace_deriv(laplace_expr, s, t):
     #assert isinstance(exp, sp.Add)
 
     P = sp.Poly(exp, s, domain = "EX")
-    items = P.as_dict().items()
+    items = list(P.as_dict().items())
 
     res = 0
     for key, coeff in items:

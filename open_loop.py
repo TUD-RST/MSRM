@@ -1,5 +1,5 @@
 # coding: utf8
-from __future__ import absolute_import
+
 
 import sympy as sp
 from sympy import pi, Matrix
@@ -11,7 +11,7 @@ from control_aux import symb_tools as st
 from IPython import embed as IPS
 
 
-u"""
+"""
 Skript zum Steuerungsentwurf für das Doppelpendel auf Rädern
 
 """
@@ -21,7 +21,7 @@ Skript zum Steuerungsentwurf für das Doppelpendel auf Rädern
 pfname = "data_model_equations.pcl"
 with open(pfname, "r") as pfile:
     pdict = pickle.load(pfile)
-    print pfname, "geladen"
+    print(pfname, "geladen")
 
 
 
@@ -90,7 +90,7 @@ elif variant == 3:
     T_end = 17
     xb = Matrix( [2, 0, 0])
 else:
-    raise ValueError, "Unerwartete Variante"
+    raise ValueError("Unerwartete Variante")
 
 M = st.row_stack(ABp, Z) # Hyper-Zeilen zusammenfügen #*-
 M = st.clean_numbers(M).as_mutable()
@@ -98,7 +98,7 @@ M = st.clean_numbers(M).as_mutable()
 # Forderung: k1, k2 so wählen, dass det == 1
 # Liste aller Koeff. des Polynoms M.det()-1
 det = st.trunc_small_values(M.berkowitz_det().expand())
-eqns = sp.Poly(det-1, s, domain = 'EX').as_dict().values()
+eqns = list(sp.Poly(det-1, s, domain = 'EX').as_dict().values())
 eqns = st.clean_numbers(eqns)
 # alle müssen identisch 0 werden
 res = sp.solve(eqns, [k1,k2])
@@ -136,7 +136,7 @@ for i in range(2):
     right = (T_end,xi_b[i,0]) + (0,)*cn
 
     poly = st.trans_poly(t, cn, left, right) # Polynome bestimmen
-    print "xi_{0}(t) = ".format(i), poly.evalf()
+    print("xi_{0}(t) = ".format(i), poly.evalf())
 
     # Stückweise definierte Funktion für konstante Teile am Anfang und Ende:
     pw = sp.Piecewise((left[1], t<left[0]), (poly, t<T_end), (right[1], True))
@@ -172,7 +172,7 @@ savefig_flag = False
 pl.plot(tt, xi1, 'k-', label =  r"$\xi_1(t)$")
 pl.plot(tt, xi2, 'k--', label =  r"$\xi_2(t)$")
 pl.legend(loc="best")
-pl.title(ur'Verläufe von $\xi_1, \xi_2$')
+pl.title(r'Verläufe von $\xi_1, \xi_2$')
 if savefig_flag:
     pl.savefig("xi_t.pdf")
 
@@ -184,7 +184,7 @@ pl.plot(tt, phi0, 'k-', label =  r"$\varphi_0(t)$")
 pl.plot(tt, phi1, 'k--', label = r"$\varphi_1(t)$")
 pl.plot(tt, phi2, 'k:', label = r"$\varphi_2(t)$")
 pl.xlabel("t")
-pl.title(ur'Verläufe von $\varphi_0, \varphi_1, \varphi_2$')
+pl.title(r'Verläufe von $\varphi_0, \varphi_1, \varphi_2$')
 pl.legend(loc="best")
 
 if savefig_flag:
@@ -209,7 +209,7 @@ pl.plot(tt, u1, 'k-', label=  "$u_1(t)$")
 pl.plot(tt, u2, 'k--', label= "$u_2(t)$")
 pl.xlabel("t")
 pl.legend(loc="best")
-pl.title(ur'Verläufe von $u_1, u_2$')
+pl.title(r'Verläufe von $u_1, u_2$')
 if savefig_flag:
     pl.savefig("u_t.pdf")
 
@@ -226,7 +226,7 @@ pdict = dict(state_traj = state_traj, u_traj = u_traj, xi_traj = xi_traj,
 traj_fname = "data_trajectories.pcl"
 with open(traj_fname, "w") as pfile:
     pickle.dump(pdict, pfile)
-    print traj_fname, "geschrieben"
+    print(traj_fname, "geschrieben")
 
 if 1:
     pl.show()

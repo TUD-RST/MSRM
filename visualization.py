@@ -41,7 +41,7 @@ def rect(x, y, wx, wy, phi = 0):
     (Path.LINETO, (x, y+wy)),
     (Path.CLOSEPOLY, (x, y)),
     ]
-    codes, verts = zip(*pathdata)
+    codes, verts = list(zip(*pathdata))
 
     verts = np.dot(rotZ(phi),np.array(verts).T).T
 
@@ -63,7 +63,7 @@ def roundrect(ax, x, y, z1, z2, w, h, phi = 0, **kwargs):
 #    (Path.LINETO, (x, y+wy)),
     (Path.CLOSEPOLY, (x, y)),
     ]
-    codes, verts = zip(*pathdata)
+    codes, verts = list(zip(*pathdata))
 
 
     verts = np.array(verts).T
@@ -114,7 +114,7 @@ def bell(ax, x, y, w1, w2, h, phi, **kwargs):
 #    (Path.LINETO, (x, y+wy)),
     (Path.CLOSEPOLY, (x, y)),
     ]
-    codes, verts = zip(*pathdata)
+    codes, verts = list(zip(*pathdata))
 
     verts = np.array(verts).T
     verts[0, :]-=w1/2.0 # correct x
@@ -222,7 +222,7 @@ def bell2(ax, x, y, px, py, w1, w2, h, phi, **kwargs):
     (Path.CLOSEPOLY, (x, y))]
 
 
-    codes, verts = zip(*pathdata)
+    codes, verts = list(zip(*pathdata))
 
 
     verts = np.array(verts).T
@@ -265,7 +265,7 @@ def wheel(ax, x, y, r, r0, phi, **kwargs):
     ax.add_patch(patch1c)
     ax.add_patch(patch2)
 
-    xx, yy = zip([x,y], mp2)
+    xx, yy = list(zip([x,y], mp2))
     # Linie statt Kreis.
     #pl.plot(xx, yy, 'k-')
 
@@ -404,10 +404,10 @@ def gen_video_frames(t_, p0_, p1_, p2_, rate, single_frame=False):
 
     while k < len(p0_):
 
-        P0, P1, P2 =  zip(p0_, p1_, p2_)[k]
+        P0, P1, P2 =  list(zip(p0_, p1_, p2_))[k]
         t = t_[k]
 
-        print t
+        print(t)
 
         ax.clear()
         draw_unicycle(P0, P1, P2, colors1)
@@ -419,10 +419,10 @@ def gen_video_frames(t_, p0_, p1_, p2_, rate, single_frame=False):
 
         pl.draw()
 
-        if isinstance(single_frame, basestring):
+        if isinstance(single_frame, str):
             fname = single_frame
             pl.savefig(fname)
-            print fname, "gespeichert"
+            print(fname, "gespeichert")
             break
 
         fname = "frame_%03d.jpg" % (pic_nbr + pic_nbr_offset)
@@ -430,7 +430,7 @@ def gen_video_frames(t_, p0_, p1_, p2_, rate, single_frame=False):
         pic_nbr+=1
 
         k+=dk
-        print "%i %%" % int(k *100/ len(tt))
+        print("%i %%" % int(k *100/ len(tt)))
 
 
 mod = 1

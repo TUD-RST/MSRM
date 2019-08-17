@@ -7,7 +7,7 @@ Authors: Thomas Mutzke, Carsten Knoll, 2013
 """
 
 import sympy as sp
-import symb_tools as st
+from . import symb_tools as st
 
 
 def Rz(phi):
@@ -29,11 +29,11 @@ def point_velocity(point, coord_symbs, velo_symbs, t):
         coord_funcs.append(sp.Function(c.name+"f")(t))
 
     coord_funcs = sp.Matrix(coord_funcs)
-    p1 = point.subs(zip(coord_symbs, coord_funcs))
+    p1 = point.subs(list(zip(coord_symbs, coord_funcs)))
 
     v1_f = p1.diff(t)
 
-    backsubs = zip(coord_funcs, coord_symbs) + zip(coord_funcs.diff(t),velo_symbs)
+    backsubs = list(zip(coord_funcs, coord_symbs)) + list(zip(coord_funcs.diff(t),velo_symbs))
 
     return v1_f.subs(backsubs)
 
@@ -58,7 +58,7 @@ def symbColVector(n, s='a'):
     TypeError: unsupported operand type(s) for +: 'int' and 'str'
     """
     if n <= 0 or int(n) != n:
-        raise ValueError, "Positive integer required"
+        raise ValueError("Positive integer required")
 
     A = sp.Matrix(n,1, lambda i,j:sp.Symbol( s+'%i'%(i+1) ) )
     return A
@@ -97,7 +97,7 @@ class SymbolicModel(object):
         assert self.eq_list != None
         assert (self.f, self.solved_eq, self.state_eq) == (None,)*3
 
-        subslist = zip(old_F, new_F)
+        subslist = list(zip(old_F, new_F))
         self.eq_list = self.eq_list.subs(subslist)
         self.extforce_list = new_F_symbols
 
@@ -128,7 +128,7 @@ def generate_model(T, U, q, F):
     qds = symbColVector(n, 'qds')
     qdds = symbColVector(n, 'qdds')
     #highest derivative first
-    subslist = zip(qdd, qdds) + zip(qd, qds) + zip(q, qs)
+    subslist = list(zip(qdd, qdds)) + list(zip(qd, qds)) + list(zip(q, qs))
     L = L.subs(subslist)
 
 
@@ -212,7 +212,7 @@ def state_eq(model):
         model.xd.row_del(i)
 
     qsubs = model.qs.col_insert(1, model.qds) #matrix with cols [qs,qds]
-    subslist = zip(model.qdds, model.xd) + zip(qsubs, model.x)
+    subslist = list(zip(model.qdds, model.xd)) + list(zip(qsubs, model.x))
 
     #state equations
     eq1 = eq1.subs(subslist)
