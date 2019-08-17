@@ -359,7 +359,7 @@ def is_left_coprime(Ap, Bp=None, eps = 1e-10):
 
     minors = [col_minor(M, *cols) for cols in combinations]
 
-    nonzero_const_minors = [m for m in minors if (m !=0) and (symb not in m)]
+    nonzero_const_minors = [m for m in minors if (m !=0) and (symb not in m.free_symbols)]
 
     if len(nonzero_const_minors) > 0:
         return True
@@ -367,7 +367,7 @@ def is_left_coprime(Ap, Bp=None, eps = 1e-10):
     #zero_minors = [m for m in minors if m == 0]
 
     # polymionors (rows belong together)
-    all_roots = [roots(m) for m in minors if symb in m]
+    all_roots = [roots(m) for m in minors if symb in m.free_symbols]
 
     # obviously all minors where zeros
     if len(all_roots) == 0:
