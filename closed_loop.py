@@ -233,7 +233,7 @@ def roots_to_rpoly_expr(symb, *roots):
     return res
 
 pfname = "data_model_equations.pcl"
-with open(pfname, "r") as pfile:
+with open(pfname, "rb") as pfile:
     pdict = pickle.load(pfile)
     print(pfname, "geladen")
 
@@ -264,7 +264,7 @@ BkAk = calc_controller(Ap, Bp, clcp4b, controller_variant = 4) #*+-
 
 pdict = dict(fb_matrix = BkAk, s = s)
 pfname = "data_feedback_matrix.pcl"
-with open(pfname, "w") as pfile:
+with open(pfname, "wb") as pfile:
     pickle.dump(pdict, pfile)
     print(pfname, "geschrieben")
 

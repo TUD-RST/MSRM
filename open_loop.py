@@ -19,7 +19,7 @@ Skript zum Steuerungsentwurf für das Doppelpendel auf Rädern
 
 # Systemgleichungen laden:
 pfname = "data_model_equations.pcl"
-with open(pfname, "r") as pfile:
+with open(pfname, "rb") as pfile:
     pdict = pickle.load(pfile)
     print(pfname, "geladen")
 
@@ -224,7 +224,7 @@ pdict = dict(state_traj = state_traj, u_traj = u_traj, xi_traj = xi_traj,
 
 #traj_fname = "data_trajectories%i.pcl" %variant
 traj_fname = "data_trajectories.pcl"
-with open(traj_fname, "w") as pfile:
+with open(traj_fname, "wb") as pfile:
     pickle.dump(pdict, pfile)
     print(traj_fname, "geschrieben")
 

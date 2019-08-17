@@ -60,8 +60,8 @@ class SimModel(object):
         def rhs(state, time): #*+
 
             # Zustände der Strecke
-            q = state[:n/2].T
-            qd = state[n/2:n].T
+            q = state[:int(n/2)].T
+            qd = state[int(n/2):n].T
 
             plant_state = np.concatenate([q, qd])
 
@@ -97,8 +97,8 @@ class SimModel(object):
             """
 
             # Zustände der Strecke
-            q = state[:n/2].T
-            qd = state[n/2:n].T
+            q = state[:int(n/2)].T
+            qd = state[int(n/2):n].T
             plant_state = np.concatenate([q, qd])
 
             # Soll-Zustand zur aktuellen Zeit:
@@ -143,7 +143,7 @@ class SimModel(object):
 # Regler-Matrix (Bk, Ak) laden und in Darstellung 1. Ordnung überführen
 
 pfname = "data_feedback_matrix.pcl"
-with open(pfname, "r") as pfile:
+with open(pfname, "rb") as pfile:
     pdict_cl = pickle.load(pfile)
 
 full_fb_matrix  = pdict_cl['fb_matrix']
@@ -172,7 +172,7 @@ Bk_state = st.to_np(state_feedback)#
 
 # Systemgleichungen laden
 pfname = "data_model_equations.pcl"
-with open(pfname, "r") as pfile:
+with open(pfname, "rb") as pfile:
     pdict_eqn = pickle.load(pfile)
     print(pfname, "geladen")
 
@@ -186,7 +186,7 @@ t = sp.Symbol('t')
 
 # Trajektoriendaten laden
 traj_fname = "data_trajectories.pcl"
-with open(traj_fname, "r") as pfile:
+with open(traj_fname, "rb") as pfile:
     pdict_ol = pickle.load(pfile)
     print(traj_fname, "geladen")
 

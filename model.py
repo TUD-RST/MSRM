@@ -170,7 +170,7 @@ if 1:
 
 # nichtlineares und lineares Modell in eine Datei schreiben
 pfname = "data_model_equations.pcl"
-with open(pfname, "w") as pfile:
+with open(pfname, "wb") as pfile:
     pickle.dump(pdict, pfile)
     print(pfname, "geschrieben")
 
