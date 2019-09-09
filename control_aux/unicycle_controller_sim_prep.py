@@ -8,7 +8,7 @@ from scipy.integrate import odeint
 import sys
 
 
-import symb_tools as st
+from . import symb_tools as st
 #from ipHelp import IPS, ST, ip_syshook, dirsearch, sys, TracerFactory
 import pylab as pl
 
@@ -143,9 +143,9 @@ def generate_state_matrices(Ak, Bk, symb):
     # jetzt Transformation auf originale Koordinaten:
     # V = T*W
 
-    T_subslist = zip(z_lhs_list, z_eq_list)
+    T_subslist = list(zip(z_lhs_list, z_eq_list))
     T_subslist.reverse()
-    T_subslist.extend( zip(y_lhs_list, y_eq_list) )
+    T_subslist.extend( list(zip(y_lhs_list, y_eq_list)) )
 
     # TODO: kann man zeigen dass T*W sich immer aus dem Zustand und den
     # Eingängen bestimmen lässt?

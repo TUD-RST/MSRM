@@ -8,7 +8,7 @@ from IPython import embed as IPS
 from control_aux.model_tools import generate_model, Rz
 from control_aux.symb_tools import symbs_to_func, zip0
 
-u"""
+"""
 Skript zur Herleitung der Modellgleichungen für das einachsige Doppelpendel
 auf Rädern
 """
@@ -96,7 +96,7 @@ sys_model.eq_list = \
 # Lagrange-Gleichungen sind aufgestellt.
 # -> Modell umformen (nach Winkelbeschleunigungen auflösen, etc)
 
-print "lineares Modell bestimmen"
+print("lineares Modell bestimmen")
 qs = sys_model.qs
 qds = sys_model.qds
 
@@ -151,13 +151,13 @@ for k in ['qs', 'qds', 'qdds', 'M0', 'K0', 'D0', 'B0', 'params',
 
 if 1:
     # zeitaufwendiger Block ("if 0:" beschleunigt debugging)
-    print "nichtlineares Modell aufbereiten (zeitaufwendig)"
+    print("nichtlineares Modell aufbereiten (zeitaufwendig)")
 
     M = sp.trigsimp(M.expand())
     d = M.det()
     d = sp.trigsimp(d, method="fu")
 
-    print "adjungierte Massenmatrix berechnen und vereinfachen"
+    print("adjungierte Massenmatrix berechnen und vereinfachen")
     adj = M.adjugate()
 
     adj = sp.trigsimp(adj)
@@ -170,9 +170,9 @@ if 1:
 
 # nichtlineares und lineares Modell in eine Datei schreiben
 pfname = "data_model_equations.pcl"
-with open(pfname, "w") as pfile:
+with open(pfname, "wb") as pfile:
     pickle.dump(pdict, pfile)
-    print pfname, "geschrieben"
+    print(pfname, "geschrieben")
 
 
 

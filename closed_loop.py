@@ -8,7 +8,7 @@ from control_aux import symb_tools as st
 
 from IPython import embed as IPS
 
-u"""
+"""
  Skript zum Reglerentwurf für das Doppelpendel auf Rädern
 
 """
@@ -111,7 +111,7 @@ def calc_controller(Ap, Bp, desired_clcp, controller_variant = 1): #*+-
         hc_flag = True
 
     else:
-        raise ValueError, "Unbekannte Regler-Variante"
+        raise ValueError("Unbekannte Regler-Variante")
 
     # Systemmatrix des geschlossenen Kreises (CLSM, Schritt 1): #*+
     CLSM1 = ApBp.col_join(Z3Z4_1)
@@ -161,7 +161,7 @@ def calc_controller(Ap, Bp, desired_clcp, controller_variant = 1): #*+-
     res = Z3Z4.subs(sol) # Endergebnis #*-
 
     # Ausgabe von BkAk:
-    print "\n", "Reglermatrix BkAk:\n\n"
+    print("\n", "Reglermatrix BkAk:\n\n")
     sp.pprint(res)
 
     if 0:
@@ -204,9 +204,9 @@ def verify_properness(CLSM, deg):
         # Properness-Probe:
         if max_num_degree <= deg:
 
-            print u"Properness für alle Einträge erfüllt"
+            print("Properness für alle Einträge erfüllt")
         else:
-            print u"Achtung: Properness nicht für alle Einträge erfüllt"
+            print("Achtung: Properness nicht für alle Einträge erfüllt")
 
 
 def roots_to_rpoly_expr(symb, *roots):
@@ -233,9 +233,9 @@ def roots_to_rpoly_expr(symb, *roots):
     return res
 
 pfname = "data_model_equations.pcl"
-with open(pfname, "r") as pfile:
+with open(pfname, "rb") as pfile:
     pdict = pickle.load(pfile)
-    print pfname, "geladen"
+    print(pfname, "geladen")
 
 Ap = pdict['Ap']
 Bp = pdict['Bp']
@@ -264,7 +264,7 @@ BkAk = calc_controller(Ap, Bp, clcp4b, controller_variant = 4) #*+-
 
 pdict = dict(fb_matrix = BkAk, s = s)
 pfname = "data_feedback_matrix.pcl"
-with open(pfname, "w") as pfile:
+with open(pfname, "wb") as pfile:
     pickle.dump(pdict, pfile)
-    print pfname, "geschrieben"
+    print(pfname, "geschrieben")
 
